@@ -1820,7 +1820,7 @@ function NameDisplay({ initialName }) {
   ] });
 }
 export {
-  NameDisplay as default,
-  jsxDEV2 as jsx,
-  render
+  render as HonoJsxRender_ClientExpose,
+  jsxDEV2 as HonoJsx_ClientExpose,
+  NameDisplay as default
 };

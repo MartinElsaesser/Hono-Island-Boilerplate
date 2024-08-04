@@ -9,8 +9,9 @@ if (islands.length > 0) {
 	for (const island of islands) {
 		const src = island.getAttribute("data-hydration-src");
 		console.log(`hydrating ${src}`);
-		const { default: Component, render, jsx: _jsx } = await import(src);
+
+		const { default: Component, HonoJsxRender_ClientExpose, HonoJsx_ClientExpose } = await import(src);
 		const props = JSON.parse(island.getAttribute("data-hydration-props"));
-		render(_jsx(Component, props), island);
+		HonoJsxRender_ClientExpose(HonoJsx_ClientExpose(Component, props), island);
 	}
 }

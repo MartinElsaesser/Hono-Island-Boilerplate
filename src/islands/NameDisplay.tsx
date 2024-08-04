@@ -11,9 +11,3 @@ export default function NameDisplay({ initialName }: { initialName: string }) {
 	)
 }
 
-// want to get rid of -  (dependencies for client side reactivity)
-//                     |
-//                     v
-import {render} from "hono/jsx/dom"
-import { jsx } from "hono/jsx/jsx-runtime";
-export {render, jsx};
