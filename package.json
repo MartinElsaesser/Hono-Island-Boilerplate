@@ -9,8 +9,7 @@
     "esbuild": "^0.23.0",
     "hono": "^4.5.3",
     "serialize-javascript": "^6.0.2",
-    "socket.io": "^4.7.5",
-    "vite": "^5.3.5"
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
