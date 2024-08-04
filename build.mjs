@@ -20,7 +20,8 @@ let addRenderDepsToIslands = {
 	}
 }
 
-const options = {
+
+let ctx = await esbuild.context({
 	entryPoints: ['src/islands/*.tsx'],
 	bundle: true,
 	minify: false,
@@ -28,14 +29,6 @@ const options = {
 	metafile: true,
 	outdir: '/static/js/islands',
 	plugins: [addRenderDepsToIslands]
-}
+});
 
-const watch = true;
-
-if (watch) {
-	let ctx = await esbuild.context(options);
-	await ctx.watch();
-} else {
-	const result = await esbuild.build(options);
-	console.log(result.metafile)
-}
+await ctx.watch();
