@@ -1,8 +1,8 @@
 {
-  "name": "Hono-Preact-Island",
+  "name": "hono-islands",
   "type": "module",
   "scripts": {
-		"client:dev": "node build.mjs",
+		"client:dev": "node build-islands.mjs",
     "server:dev": "tsx watch src/server.tsx",
 		"dev": "concurrently \"npm run client:dev\" \"npm run server:dev\""
   },
