@@ -10,12 +10,13 @@ import { readFile } from 'fs/promises';
  * 4. save them to /static/js/islands/[Name].js.
  *
  * rendering of the island components is handled in /static/js/hydrate.mjs
+ * @param "--watch" - starts the build in watch mode
  */
 
 /**
  * plugin adds packages for client side rendering (CSR)
  */
-let addCSRDependencies = {
+let plugin_addCSRPackages = {
 	name: "add-csr-deps",
 	setup(build) {
 		const renderDependencies = `
@@ -40,15 +41,30 @@ let addCSRDependencies = {
 	}
 }
 
-
-let ctx = await esbuild.context({
+///////////////////////
+// esbuild config
+const buildOptions = {
 	entryPoints: ['src/islands/*.tsx'],
 	bundle: true,
 	minify: false,
 	format: "esm",
-	metafile: true,
 	outdir: '/static/js/islands',
-	plugins: [addCSRDependencies]
-});
+	plugins: [plugin_addCSRPackages]
+}
 
-await ctx.watch();
+///////////////////////
+// start esbuild
+const startInWatchMode = process.argv.includes("--watch")
+
+if (startInWatchMode) {
+	console.log("Started watch mode for client files");
+
+	// watch and re-transpile typescript files on change
+	let ctx = await esbuild.context(buildOptions);
+	await ctx.watch();
+} else {
+	console.log("Building client files");
+
+	// transpile typescript files
+	await esbuild.build(buildOptions);
+}
