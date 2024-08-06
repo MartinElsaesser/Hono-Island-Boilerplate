@@ -2,9 +2,9 @@
   "name": "hono-islands",
   "type": "module",
   "scripts": {
-		"client:dev": "node build-islands.mjs",
-    "server:dev": "tsx watch src/server.tsx",
-		"dev": "concurrently \"npm run client:dev\" \"npm run server:dev\""
+		"client-dev": "node build-islands.mjs",
+    "server-dev": "tsx watch --clear-screen=false src/server.tsx",
+		"dev": "concurrently -n client,server💻 \"npm:client-dev\" \"npm:server-dev\""
   },
   "dependencies": {
     "@hono/node-server": "^1.12.0",
