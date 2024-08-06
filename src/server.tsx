@@ -45,7 +45,7 @@ const port = 3000
 const server = serve(
 	{ fetch: app.fetch, port },
 	(info) => {
-		console.log(`Listening on http://localhost:${port}`);
+		console.log(`Server started on http://localhost:${port}`);
 	}
 );
 
