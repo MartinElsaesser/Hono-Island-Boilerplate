@@ -2,16 +2,21 @@ import * as esbuild from 'esbuild'
 import { readFile } from 'fs/promises';
 
 /**
- * @file Configures the build step for island components
+ * @file
+ * Contains the build step for island components:
+ * 1. take files matching /src/islands/[Name].tsx
+ * 2. add dependencies for client side rendering
+ * 3. bundle the files and transform them to javascript
+ * 4. save them to /static/js/islands/[Name].js.
+ *
+ * rendering of the island components is handled in /static/js/hydrate.mjs
  */
 
 /**
- * load .tsx files  
- * append packages for client rendering to the code  
- * and pass the modified files along to the build step
+ * plugin adds packages for client side rendering (CSR)
  */
-let addRenderDepsToIslands = {
-	name: "add-render-deps",
+let addCSRDependencies = {
+	name: "add-csr-deps",
 	setup(build) {
 		const renderDependencies = `
 				import { render as HonoJsxRender_ClientExpose} from "hono/jsx/dom"
@@ -20,8 +25,13 @@ let addRenderDepsToIslands = {
 			`;
 
 		build.onLoad({ filter: /\.tsx$/ }, async (args) => {
+			// load tsx file
 			let tsxFile = await readFile(args.path, "utf-8");
+
+			// append packages for client side rendering
 			tsxFile += renderDependencies;
+
+			// pass component on to the build step
 			return {
 				contents: tsxFile,
 				loader: "tsx"
@@ -38,7 +48,7 @@ let ctx = await esbuild.context({
 	format: "esm",
 	metafile: true,
 	outdir: '/static/js/islands',
-	plugins: [addRenderDepsToIslands]
+	plugins: [addCSRDependencies]
 });
 
 await ctx.watch();
