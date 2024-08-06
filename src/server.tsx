@@ -1,12 +1,12 @@
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono'
-import socketIOServer from './socket-io-server';
-import Home from './pages/Home';
+import socketIOServer from './socket-io-server.js';
+import Home from './pages/Home.js';
 import { jsxRenderer } from 'hono/jsx-renderer';
-import Island from './Island';
-import TodoApp from './islands/TodoApp';
-import type { Todo } from './islands/TodoApp';
+import Island from './Island.js';
+import TodoApp from './islands/TodoApp.js';
+import type { Todo } from './islands/TodoApp.js';
 
 const app = new Hono()
 

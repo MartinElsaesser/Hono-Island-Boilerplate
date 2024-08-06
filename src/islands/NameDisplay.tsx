@@ -1,4 +1,4 @@
-import { useInput } from "../lib/useInput";
+import { useInput } from "../lib/useInput.js";
 
 export default function NameDisplay({ initialName }: { initialName: string }) {
 	const name = useInput(initialName);
