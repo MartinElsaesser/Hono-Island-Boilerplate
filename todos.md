@@ -3,16 +3,24 @@
 
 	- [ ] improve build step
 		- [ ] [load render deps only once](#load-render-deps-once)
+		- [ ] add options to build-islands.mjs
+			- [ ] minify
+			- [ ] watch (**change to watch: true**)
+		- [ ] [copy files when building](https://www.npmjs.com/package/esbuild-plugin-copy?ref=blog.bitbriks.com)
 
 	- [ ] improve dx of islands
 		- [ ] add error message when an island is within another island
 		- [ ] add .island.tsx extension?
+		- [ ] add debugger
+			- [ ] separate build script which generates source maps
+			- [ ] add source maps
+			- [ ] turn source maps off for production build
 		- [ ] try out react
 			- [ ] for better error handling?
 			- [ ] better code splitting?
 
 	- [ ] documentation
-		- [ ] write documenation
+		- [ ] write documentation
 		- [ ] draw diagrams
 		- [ ] add code comments
 
