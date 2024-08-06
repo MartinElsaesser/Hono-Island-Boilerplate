@@ -39,6 +39,7 @@
 - [ ] import once
 	- [ ] import render deps once from esm.sh
 	- [ ] import render deps once from bundled `.ts` file
+	- [ ] hypothesis: symbols in `constants.ts` ruins import once use everywhere
 - [x] import multiple times
 	- [x] bundle render deps with every component
 
