@@ -12,9 +12,13 @@
 		- [ ] add error message when an island is within another island
 		- [ ] add .island.tsx extension?
 		- [ ] add debugger
-			- [ ] separate build script which generates source maps
-			- [ ] add source maps
-			- [ ] turn source maps off for production build
+			- [ ] source maps
+				- [ ] separate build script which generates source maps
+				- [x] add source maps
+				- [ ] turn source maps off for production build
+			- [ ] options
+				- [ ] any ts/tsx file
+				- [ ] server
 		- [ ] try out react
 			- [ ] for better error handling?
 			- [ ] better code splitting?
