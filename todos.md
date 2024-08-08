@@ -2,11 +2,20 @@
 - [ ] Island hydration
 
 	- [ ] improve build step
-		- [ ] [load render deps only once](#load-render-deps-once)
-		- [ ] add options to build-islands.mjs
+		- [x] [load render deps only once](#load-render-deps-once)
+		- [ ] add cli options to build-islands.mjs
 			- [ ] minify
 			- [ ] watch (**change to watch: true**)
+			- [ ] enable chunking
+		- [ ] improve linking of island component source
 		- [ ] [copy files when building](https://www.npmjs.com/package/esbuild-plugin-copy?ref=blog.bitbriks.com)
+		- [ ] add css styles
+			* [tailwind via esbuild plugin](https://www.npmjs.com/package/esbuild-plugin-tailwindcss)
+			* [tailwind via esbuild & postcss](https://stackoverflow.com/questions/70716940/using-tailwind-css-with-esbuild-the-process/72723786#72723786)
+			* hono css
+			* [css modules via esbuild plugin](https://www.npmjs.com/package/esbuild-css-modules-plugin)
+			* [vanilla extract](https://www.npmjs.com/package/@vanilla-extract/esbuild-plugin)
+			* native css
 
 	- [ ] improve dx of islands
 		- [ ] add error message when an island is within another island
@@ -34,14 +43,13 @@
 	- [ ] add tailwind
 	- [ ] add sessions + flash
 
+- [ ] check if architecture is feasible
+	- [ ] test different versions of node (problems with top level await?)
+	- [ ] test different browsers (problems with esm modules?)
 
 ### load render deps once
-- [ ] import once
-	- [ ] import render deps once from esm.sh
-	- [ ] import render deps once from bundled `.ts` file
-	- [ ] hypothesis: symbols in `constants.ts` ruins import once use everywhere
-- [x] import multiple times
-	- [x] bundle render deps with every component
+- [x] import once
+	- achieved by enabling code splitting in esbuild
 
 * having one import for the render deps seems impossible at the time beeing
 * things tried:
