@@ -1,7 +1,8 @@
+// @ts-check
 import * as esbuild from 'esbuild'
-import { readFile } from 'fs/promises';
+import { readFile, rm, rmdir } from 'fs/promises';
 
-/**
+/*
  * @file
  * Contains the build step for island components:
  * 1. take files matching /src/islands/[Name].tsx
@@ -13,16 +14,19 @@ import { readFile } from 'fs/promises';
  * @param "--watch" - starts the build in watch mode
  */
 
+
 /**
  * plugin adds packages for client side rendering (CSR)
  */
+
+/** @type {import('esbuild').Plugin} */
 let plugin_addCSRPackages = {
 	name: "add-csr-deps",
 	setup(build) {
 		const renderDependencies = `
-				import { render as HonoJsxRender_ClientExpose} from "hono/jsx/dom"
-				import { jsx as HonoJsx_ClientExpose } from "hono/jsx/jsx-runtime";
-				export {HonoJsxRender_ClientExpose, HonoJsx_ClientExpose };
+				import { render } from "hono/jsx/dom"
+				import { jsx } from "hono/jsx/jsx-runtime";
+				export { render as __render__,  jsx as __jsx__ };
 			`;
 
 		build.onLoad({ filter: /\.tsx$/ }, async (args) => {
@@ -41,22 +45,28 @@ let plugin_addCSRPackages = {
 	}
 }
 
-///////////////////////
-// esbuild config
+/** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
 	entryPoints: ['src/islands/*.tsx'],
 	bundle: true,
 	minify: false,
 	format: "esm",
 	outdir: '/static/js/islands',
-	plugins: [plugin_addCSRPackages]
+	plugins: [plugin_addCSRPackages],
+	chunkNames: "[name]-[hash]",
+	splitting: true,
+
 }
+
+
+// delete last build files
+await rm(import.meta.dirname + "/static/js/islands", { force: true, recursive: true })
 
 ///////////////////////
 // start esbuild
-const startInWatchMode = process.argv.includes("--watch")
+const startInDevMode = process.argv.includes("--watch")
 
-if (startInWatchMode) {
+if (startInDevMode) {
 	console.log("Started watch mode for client files");
 
 	// watch and re-transpile typescript files on change
@@ -66,5 +76,6 @@ if (startInWatchMode) {
 	console.log("Building client files");
 
 	// transpile typescript files
-	await esbuild.build(buildOptions);
+	let ctx = await esbuild.build(buildOptions);
+
 }
