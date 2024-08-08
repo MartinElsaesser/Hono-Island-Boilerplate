@@ -2,11 +2,11 @@ import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono'
 import socketIOServer from './socket-io-server.js';
-import Home from './pages/Home.js';
 import { jsxRenderer } from 'hono/jsx-renderer';
 import Island from './Island.js';
 import TodoApp from './islands/TodoApp.js';
 import type { Todo } from './islands/TodoApp.js';
+import Counter from './islands/Counter.js';
 
 const app = new Hono()
 
@@ -29,10 +29,25 @@ app.get(
 	})
 )
 app.get('/', (c) => {
+	return c.render(
+		<>
+			<h2>Counter 1</h2>
+			<Island src='Counter.js'>
+				<Counter initialCount={1}></Counter>
+			</Island>
+			<h2>Counter 2</h2>
+			<Island src='Counter.js'>
+				<Counter initialCount={2}></Counter>
+			</Island>
+		</>
+	)
+});
+
+app.get('/todos', (c) => {
 	const todos: Todo[] = [
-		{head: "Milk the cow", done: false},
-		{head: "Watch Youtube", done: false},
-		{head: "Build todo app", done: false},
+		{ head: "Milk the cow", done: false },
+		{ head: "Watch Youtube", done: false },
+		{ head: "Build todo app", done: false },
 	]
 	return c.render(
 		<Island src='TodoApp.js'>
