@@ -18,6 +18,11 @@
 			* native css
 
 	- [ ] improve dx of islands
+		- [ ] check type of children; only accept one component
+		- [ ] check if src is correct
+		- [ ] add comments with the source to the component and its name
+		- [ ] use javascript-serializer
+		- [ ] research max length of data-[argument] properties -> change how props are delivered?
 		- [ ] add error message when an island is within another island
 		- [ ] add .island.tsx extension?
 		- [ ] add debugger
