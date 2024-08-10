@@ -32,11 +32,11 @@ app.get('/', (c) => {
 	return c.render(
 		<>
 			<h2>Counter 1</h2>
-			<Island src='Counter.js'>
-				<Counter initialCount={1}></Counter>
+			<Island pathToComponent='/src/islands/Counter.tsx'>
+				<Counter initialCount={4}></Counter>
 			</Island>
 			<h2>Counter 2</h2>
-			<Island src='Counter.js'>
+			<Island pathToComponent='/src/islands/Counter.tsx'>
 				<Counter initialCount={2}></Counter>
 			</Island>
 		</>
@@ -50,7 +50,7 @@ app.get('/todos', (c) => {
 		{ head: "Build todo app", done: false },
 	]
 	return c.render(
-		<Island src='TodoApp.js'>
+		<Island pathToComponent='/src/islands/TodoApp.tsx'>
 			<TodoApp _todos={todos}></TodoApp>
 		</Island>
 	)
