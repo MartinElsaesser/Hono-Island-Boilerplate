@@ -47,7 +47,7 @@ let plugin_addCSRPackages = {
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
-	entryPoints: ['src/islands/*.tsx'],
+	entryPoints: ['src/islands/**/*.tsx'],
 	bundle: true,
 	minify: false,
 	format: "esm",
