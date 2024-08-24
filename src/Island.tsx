@@ -1,5 +1,6 @@
 import { raw } from "hono/html";
-import { JSXNode } from "hono/jsx";
+import { isValidElement, jsx, JSXNode, Suspense } from "hono/jsx";
+import { HtmlEscaped } from "hono/utils/html";
 import serialize from "serialize-javascript";
 
 
@@ -36,29 +37,33 @@ async function verifyComponentImport(pathToComponent: string, IslandComponent: J
  * @param path - path to an island component
  */
 function throwOnFaultyComponentPath(path: string) {
-
 	const absolutePathToIslandsDir = /^\/src\/islands\/.*\.tsx$/;
 	const goBacksInPath = /\/..\//;
 
-	// throw error if /../ is found in componentPath
-	if (goBacksInPath.test(path)) {
-		throw new Error(`"/../" not allowed in {pathToComponent:"${path}"}`); }
-	
 	// throw error if pathToComponent differs from /src/islands/.../[name].tsx
 	if (!absolutePathToIslandsDir.test(path)) {
 		// ** means zero or more directories
-		throw new Error(`pattern "/src/islands/**/[name].tsx" not adhered to by {pathToComponent: "${path}"}`); 
+		throw new Error(`{pathToComponent: "${path}"} needs to macht "/src/islands/**/[name].tsx"`);
+	}
+
+	// throw error if /../ is found in componentPath
+	if (goBacksInPath.test(path)) {
+		throw new Error(`{pathToComponent:"${path}"} contains illegal "/../"`);
 	}
 }
 
 
-export default async function Island({ children, pathToComponent }: { children: any, pathToComponent: string }) {
+export type Child = Promise<HtmlEscaped> | HtmlEscaped;
+export default async function Island({ children, pathToComponent }: { children: Child, pathToComponent: string }) {
 	// goal: only allow imports matching /src/islands/**/[name].tsx
 	// if goal is not met: throw an error
 	// note: ** means zero or more directories
 
-
 	try {
+		// try embedding component
+		if(!isValidElement(children)) {
+			throw Error("only components are valid children");
+		}
 		throwOnFaultyComponentPath(pathToComponent);
 		await verifyComponentImport(pathToComponent, children)
 		const regex_filePathNoExt = /^\/src\/islands\/(.*)\.tsx$/;
@@ -70,7 +75,8 @@ export default async function Island({ children, pathToComponent }: { children: 
 			</div>
 		)
 	} catch (error: unknown)  {
-		let message = "Island.tsx error";
+		// display errors
+		let message = "";
 
     if (typeof error === "string") {
         message = error;
@@ -80,9 +86,8 @@ export default async function Island({ children, pathToComponent }: { children: 
 
 		return (
 			<div style="color: red; background: lightgrey;">
-				Island.tsx Error &gt;&gt; {message}
+				Island Error &gt;&gt; {message}
 			</div>
-		)
-		
+		);
 	}
 }
