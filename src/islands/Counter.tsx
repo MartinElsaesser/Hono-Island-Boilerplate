@@ -6,9 +6,9 @@ export default function Counter({ initialCount }: { initialCount: number }) {
 	return (
 		<div>
 			<div>
-				<button onClick={e => setCount(c => c+1)}>+</button>
-				<span>{count}</span>
 				<button onClick={e => setCount(c => c-1)}>-</button>
+				<span>{count}</span>
+				<button onClick={e => setCount(c => c+1)}>+</button>
 			</div>
 		</div>
 	)
