@@ -6,8 +6,10 @@ import { reactRenderer } from '@hono/react-renderer';
 import Island from './Island.js';
 import TodoApp from './islands/TodoApp.js';
 import type { Todo } from './islands/TodoApp.js';
-import Counter from './islands/Counter.js';
+import islands from './islands/islands.js';
 import { Suspense } from 'react';
+
+const { Counter } = islands;
 
 const app = new Hono();
 
@@ -36,11 +38,11 @@ app.get('/', (c) => {
   return c.render(
     <>
       <h2>Counter 1</h2>
-      <Island pathToComponent="/src/islands/Counter.tsx">
+      <Island>
         <Counter initialCount={4}></Counter>
       </Island>
       <h2>Counter 2</h2>
-      <Island pathToComponent="/src/islands/Counter.tsx">
+      <Island>
         <Counter initialCount={2}></Counter>
       </Island>
     </>
@@ -54,7 +56,7 @@ app.get('/todos', (c) => {
     { head: 'Build todo app', done: false },
   ];
   return c.render(
-    <Island pathToComponent="/src/islands/TodoApp.tsx">
+    <Island>
       <TodoApp _todos={todos}></TodoApp>
     </Island>
   );
