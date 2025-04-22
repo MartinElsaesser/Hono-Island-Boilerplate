@@ -1,13 +1,25 @@
-const islands = Array.from(document.querySelectorAll('[data-hydration-src]'));
+const islandWrappers = Array.from(
+  document.querySelectorAll('[data-hydration-src]')
+);
 
-if (islands.length > 0) {
-  for (const island of islands) {
-    const src = island.getAttribute('data-hydration-src');
+if (islandWrappers.length > 0) {
+  for (const wrapper of islandWrappers) {
+    const src = wrapper.getAttribute('data-hydration-src');
     console.log(`hydrating ${src}`);
 
-    const { default: Component, __createRoot__, __jsx__ } = await import(src);
-    const props = JSON.parse(island.getAttribute('data-hydration-props'));
-    const root = __createRoot__(island);
-    root.render(__jsx__(Component, props));
+    const {
+      default: islands,
+      __createRoot__,
+      __jsx__,
+    } = await import('/static/js/islands/islands.js');
+
+    const props = JSON.parse(wrapper.getAttribute('data-hydration-props'));
+    const root = __createRoot__(wrapper);
+
+    // find matching island in the islands object
+    const island = Object.values(islands).find(
+      (island) => island.hydrationId === src
+    );
+    root.render(__jsx__(island, props));
   }
 }
