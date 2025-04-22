@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
-		"rootDir": "src",
-		"outDir": "dist",
+    "rootDir": "src",
+    "outDir": "dist",
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "strict": true,
     "skipLibCheck": true,
-		"esModuleInterop": true,
-    "types": [
-      "node"
-    ],
+    "esModuleInterop": true,
+    "types": ["node"],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-		"sourceMap": true
+    "jsxImportSource": "react",
+    "sourceMap": true
   }
 }

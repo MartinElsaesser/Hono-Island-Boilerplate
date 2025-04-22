@@ -1,5 +1,5 @@
 // @ts-check
-import * as esbuild from 'esbuild'
+import * as esbuild from 'esbuild';
 import { readFile, rm, rmdir } from 'fs/promises';
 
 /*
@@ -14,68 +14,67 @@ import { readFile, rm, rmdir } from 'fs/promises';
  * @param "--watch" - starts the build in watch mode
  */
 
-
 /**
  * plugin adds packages for client side rendering (CSR)
  */
 
 /** @type {import('esbuild').Plugin} */
 let plugin_addCSRPackages = {
-	name: "add-csr-deps",
-	setup(build) {
-		const renderDependencies = `
-				import { render } from "hono/jsx/dom"
-				import { jsx } from "hono/jsx/jsx-runtime";
-				export { render as __render__,  jsx as __jsx__ };
-			`;
+  name: 'add-csr-deps',
+  setup(build) {
+    const renderDependencies = `
+		import { createRoot } from 'react-dom/client';
+		import { jsx } from 'react/jsx-runtime';
+		export { jsx as __jsx__, createRoot as __createRoot__ };
+	`;
 
-		build.onLoad({ filter: /\.tsx$/ }, async (args) => {
-			// load tsx file
-			let tsxFile = await readFile(args.path, "utf-8");
+    build.onLoad({ filter: /\.tsx$/ }, async (args) => {
+      // load tsx file
+      let tsxFile = await readFile(args.path, 'utf-8');
 
-			// append packages for client side rendering
-			tsxFile += renderDependencies;
+      // append packages for client side rendering
+      tsxFile += renderDependencies;
 
-			// pass component on to the build step
-			return {
-				contents: tsxFile,
-				loader: "tsx"
-			}
-		});
-	}
-}
+      // pass component on to the build step
+      return {
+        contents: tsxFile,
+        loader: 'tsx',
+      };
+    });
+  },
+};
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
-	entryPoints: ['src/islands/**/*.tsx'],
-	bundle: true,
-	minify: false,
-	format: "esm",
-	outdir: '/static/js/islands',
-	plugins: [plugin_addCSRPackages],
-	chunkNames: "[name]-[hash]",
-	splitting: true,
-
-}
-
+  entryPoints: ['src/islands/**/*.tsx'],
+  bundle: true,
+  minify: false,
+  format: 'esm',
+  outdir: '/static/js/islands',
+  plugins: [plugin_addCSRPackages],
+  chunkNames: '[name]-[hash]',
+  splitting: true,
+};
 
 // delete last build files
-await rm(import.meta.dirname + "/static/js/islands", { force: true, recursive: true })
+await rm(import.meta.dirname + '/static/js/islands', {
+  force: true,
+  recursive: true,
+});
 
 ///////////////////////
 // start esbuild
-const startInDevMode = process.argv.includes("--watch")
+const startInDevMode = process.argv.includes('--watch');
 
 if (startInDevMode) {
-	console.log("Started watch mode for client files");
+  console.log('Started watch mode for client files');
 
-	// watch and re-transpile typescript files on change
-	let ctx = await esbuild.context(buildOptions);
-	await ctx.watch();
+  // watch and re-transpile typescript files on change
+  let ctx = await esbuild.context(buildOptions);
+  await ctx.watch();
 } else {
-	console.log("Building client files");
+  console.log('Building client files');
 
-	// transpile typescript files
-	let ctx = await esbuild.build(buildOptions);
-
+  // transpile typescript files
+  let ctx = await esbuild.build(buildOptions);
 }

@@ -1,6 +1,4 @@
-import { raw } from 'hono/html';
-import { isValidElement, jsx, JSXNode, Suspense } from 'hono/jsx';
-import { HtmlEscaped } from 'hono/utils/html';
+import React from 'react';
 import serialize from 'serialize-javascript';
 
 /**
@@ -13,7 +11,7 @@ import serialize from 'serialize-javascript';
  */
 async function verifyComponentImport(
   pathToComponent: string,
-  IslandComponent: JSXNode
+  IslandComponent: React.ReactElement
 ) {
   // default import the contents from pathToComponent
   // default import is expected to equal IslandComponent
@@ -23,16 +21,16 @@ async function verifyComponentImport(
   );
 
   // throw error if IslandComponent is not a functional component
-  if (typeof IslandComponent.tag !== 'function') {
+  if (typeof IslandComponent.type !== 'function') {
     throw new Error(
-      `Island component "${IslandComponent.tag}" is not a functional component`
+      `Island component "${IslandComponent.type}" is not a functional component`
     );
   }
 
   // throw error if IslandComponent does not match Imported Component
-  if (ImportedComponent !== IslandComponent.tag) {
+  if (IslandComponent.type !== ImportedComponent) {
     throw new Error(
-      `Island component "${IslandComponent.tag.name}" does not match the one from pathToComponent "${ImportedComponent.name}"`
+      `Island component "${IslandComponent.type.name}" does not match the one from pathToComponent "${ImportedComponent.name}"`
     );
   }
 }
@@ -62,12 +60,11 @@ function throwOnFaultyComponentPath(path: string) {
   }
 }
 
-export type Child = Promise<HtmlEscaped> | HtmlEscaped;
 export default async function Island({
   children,
   pathToComponent,
 }: {
-  children: Child;
+  children: React.ReactElement;
   pathToComponent: string;
 }) {
   // goal: only allow imports matching /src/islands/**/[name].tsx
@@ -76,7 +73,7 @@ export default async function Island({
 
   try {
     // try embedding component
-    if (!isValidElement(children)) {
+    if (!React.isValidElement(children)) {
       throw Error('only components are valid children');
     }
     throwOnFaultyComponentPath(pathToComponent);
@@ -104,7 +101,7 @@ export default async function Island({
     }
 
     return (
-      <div style="color: red; background: lightgrey;">
+      <div style={{ color: 'red', background: 'lightgrey' }}>
         Island Error &gt;&gt; {message}
       </div>
     );
