@@ -1,6 +1,8 @@
 import React from 'react';
 import serialize from 'serialize-javascript';
 
+import islands from './islands/islands.js';
+
 export default async function Island({
   children,
 }: {
@@ -23,10 +25,13 @@ export default async function Island({
       );
     }
 
+    const islandIdx = islands.findIndex((island) => island === children.type);
+    // TODO: handle island not found
+
     return (
       // TODO: serialize `children.props` such that Maps, Sets and Dates are supported
       <div
-        data-hydration-src={children.type.hydrationId}
+        data-hydration-island-idx={islandIdx}
         data-hydration-props={JSON.stringify(children.props)}
       >
         {children}

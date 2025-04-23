@@ -8,8 +8,7 @@ import TodoApp from './islands/TodoApp.js';
 import type { Todo } from './islands/TodoApp.js';
 import islands from './islands/islands.js';
 import { Suspense } from 'react';
-
-const { Counter } = islands;
+import Counter from './islands/Counter.js';
 
 const app = new Hono();
 
