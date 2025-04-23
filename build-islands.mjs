@@ -4,17 +4,17 @@ import { readFile, rm, rmdir } from 'fs/promises';
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
-  entryPoints: ['src/islands/islands.tsx'],
+  entryPoints: ['src/islands/client.tsx'],
   bundle: true,
   minify: false,
   format: 'esm',
-  outdir: '/static/js/islands',
+  outdir: '/static/js/build',
   chunkNames: '[name]-[hash]',
   splitting: true,
 };
 
 // delete last build files
-await rm(import.meta.dirname + '/static/js/islands', {
+await rm(import.meta.dirname + '/static/js/build', {
   force: true,
   recursive: true,
 });

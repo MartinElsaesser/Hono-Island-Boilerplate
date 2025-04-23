@@ -1,7 +1,6 @@
 import React from 'react';
 import serialize from 'serialize-javascript';
-
-import islands from './islands/islands.js';
+import { registeredIslands } from './shared.js';
 
 export default async function Island({
   children,
@@ -25,7 +24,9 @@ export default async function Island({
       );
     }
 
-    const islandIdx = islands.findIndex((island) => island === children.type);
+    const islandIdx = registeredIslands.findIndex(
+      (island) => island === children.type
+    );
     // TODO: handle island not found
 
     return (

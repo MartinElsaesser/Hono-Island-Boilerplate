@@ -3,12 +3,11 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import socketIOServer from './socket-io-server.js';
 import { reactRenderer } from '@hono/react-renderer';
-import Island from './Island.js';
 import TodoApp from './components/TodoApp.js';
 import type { Todo } from './components/TodoApp.js';
-import islands from './islands/islands.js';
 import { Suspense } from 'react';
 import Counter from './components/Counter.js';
+import Island from './islands/server.js';
 
 const app = new Hono();
 
@@ -25,7 +24,7 @@ app.get(
           </head>
           <body>
             <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
-            <script type="module" src="/static/js/hydrate.mjs"></script>
+            <script type="module" src="/static/js/build/client.js"></script>
           </body>
         </html>
       );
