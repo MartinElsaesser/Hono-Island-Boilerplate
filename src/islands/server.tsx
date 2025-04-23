@@ -13,7 +13,6 @@ export default async function Island({
       throw Error('only components are valid children');
     }
 
-    // TODO: also support class components
     // throw error if children is not a functional component
     if (typeof children.type !== 'function') {
       throw new Error(
@@ -32,7 +31,6 @@ export default async function Island({
     }
 
     return (
-      // TODO: serialize `children.props` such that Maps, Sets and Dates are supported
       <div
         data-hydration-island-idx={islandIdx}
         data-hydration-props={JSON.stringify(children.props)}
