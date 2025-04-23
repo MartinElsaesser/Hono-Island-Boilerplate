@@ -7,23 +7,21 @@ export default async function Island({
 }: {
   children: React.ReactElement;
 }) {
-  // goal: only allow imports matching /src/islands/**/[name].tsx
-  // if goal is not met: throw an error
-  // note: ** means zero or more directories
-
   try {
-    // try embedding component
+    // check if children is a valid react element
     if (!React.isValidElement(children)) {
       throw Error('only components are valid children');
     }
 
-    // throw error if IslandComponent is not a functional component
+    // TODO: also support class components
+    // throw error if children is not a functional component
     if (typeof children.type !== 'function') {
       throw new Error(
         `Island component "${children.type}" is not a functional component`
       );
     }
 
+    // check if children is a registered island
     const islandIdx = registeredIslands.findIndex(
       (island) => island === children.type
     );
