@@ -1,6 +1,6 @@
 // @ts-check
 import * as esbuild from 'esbuild';
-import { readFile, rm, rmdir } from 'fs/promises';
+import { rm } from 'fs/promises';
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
