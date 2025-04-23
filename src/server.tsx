@@ -37,11 +37,11 @@ app.get('/', (c) => {
     <>
       <h2>Counter 1</h2>
       <Island>
-        <Counter initialCount={4}></Counter>
+        <Counter $count={4}></Counter>
       </Island>
       <h2>Counter 2</h2>
       <Island>
-        <Counter initialCount={2}></Counter>
+        <Counter $count={2}></Counter>
       </Island>
     </>
   );
@@ -55,7 +55,7 @@ app.get('/todos', (c) => {
   ];
   return c.render(
     <Island>
-      <TodoApp _todos={todos}></TodoApp>
+      <TodoApp $todos={todos}></TodoApp>
     </Island>
   );
 });
