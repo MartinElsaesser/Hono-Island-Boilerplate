@@ -1,11 +1,7 @@
 import React from 'react';
 import { registeredIslands } from './shared.js';
 
-export default async function Island({
-  children,
-}: {
-  children: React.ReactElement;
-}) {
+export default function Island({ children }: { children: React.ReactElement }) {
   try {
     // check if children is a valid react element
     if (!React.isValidElement(children)) {

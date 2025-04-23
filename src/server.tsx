@@ -27,7 +27,7 @@ app.get(
         </html>
       );
     },
-    { docType: true, stream: true }
+    { docType: true }
   )
 );
 app.get('/', (c) => {
