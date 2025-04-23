@@ -1,6 +1,5 @@
 // @ts-check
 import * as esbuild from 'esbuild';
-import { rm } from 'fs/promises';
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
@@ -12,12 +11,6 @@ const buildOptions = {
   chunkNames: '[name]-[hash]',
   splitting: true,
 };
-
-// delete last build files
-await rm(import.meta.dirname + '/static/js/build', {
-  force: true,
-  recursive: true,
-});
 
 ///////////////////////
 // start esbuild
