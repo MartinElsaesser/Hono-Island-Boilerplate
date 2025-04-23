@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useInput } from '../lib/useInput.js';
+import { useInput } from '../hooks/useInput.js';
 
 export type Todo = {
   head: string;
