@@ -4,7 +4,6 @@ import { Hono } from 'hono';
 import socketIOServer from './socket-io-server.js';
 import { reactRenderer } from '@hono/react-renderer';
 import TodoApp, { type Todo } from './components/TodoApp.js';
-import { Suspense } from 'react';
 import Counter from './components/Counter.js';
 import Island from './islands/server.js';
 
@@ -22,7 +21,7 @@ app.get(
             <link rel="stylesheet" href="/static/css/app.css" />
           </head>
           <body>
-            <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
+            {children}
             <script type="module" src="/static/js/build/client.js"></script>
           </body>
         </html>
