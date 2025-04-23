@@ -4,11 +4,11 @@ import { Hono } from 'hono';
 import socketIOServer from './socket-io-server.js';
 import { reactRenderer } from '@hono/react-renderer';
 import Island from './Island.js';
-import TodoApp from './islands/TodoApp.js';
-import type { Todo } from './islands/TodoApp.js';
+import TodoApp from './components/TodoApp.js';
+import type { Todo } from './components/TodoApp.js';
 import islands from './islands/islands.js';
 import { Suspense } from 'react';
-import Counter from './islands/Counter.js';
+import Counter from './components/Counter.js';
 
 const app = new Hono();
 

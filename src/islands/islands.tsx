@@ -1,5 +1,5 @@
-import Counter from './Counter.js';
-import TodoApp from './TodoApp.js';
+import Counter from '../components/Counter.js';
+import TodoApp from '../components/TodoApp.js';
 import React from 'react';
 
 // register islands
