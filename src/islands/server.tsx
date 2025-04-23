@@ -27,7 +27,11 @@ export default async function Island({
     const islandIdx = registeredIslands.findIndex(
       (island) => island === children.type
     );
-    // TODO: handle island not found
+    if (islandIdx === -1) {
+      throw new Error(
+        `Island component "${children.type.name}" is not registered as an island. Please add it to the registeredIslands array.`
+      );
+    }
 
     return (
       // TODO: serialize `children.props` such that Maps, Sets and Dates are supported
