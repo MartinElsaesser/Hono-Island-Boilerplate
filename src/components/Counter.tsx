@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-export default function Counter({ initialCount }: { initialCount: number }) {
-  const [count, setCount] = useState(initialCount);
+export default function Counter({ $count }: { $count: number }) {
+  const [count, setCount] = useState($count);
 
   return (
     <div>

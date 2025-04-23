@@ -3,11 +3,9 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import socketIOServer from './socket-io-server.js';
 import { reactRenderer } from '@hono/react-renderer';
-import Island from './Island.js';
-import TodoApp from './islands/TodoApp.js';
-import type { Todo } from './islands/TodoApp.js';
-import Counter from './islands/Counter.js';
-import { Suspense } from 'react';
+import TodoApp, { type Todo } from './components/TodoApp.js';
+import Counter from './components/Counter.js';
+import Island from './islands/server.js';
 
 const app = new Hono();
 
@@ -23,8 +21,8 @@ app.get(
             <link rel="stylesheet" href="/static/css/app.css" />
           </head>
           <body>
-            <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
-            <script type="module" src="/static/js/hydrate.mjs"></script>
+            {children}
+            <script type="module" src="/static/js/build/client.js"></script>
           </body>
         </html>
       );
@@ -36,12 +34,12 @@ app.get('/', (c) => {
   return c.render(
     <>
       <h2>Counter 1</h2>
-      <Island pathToComponent="/src/islands/Counter.tsx">
-        <Counter initialCount={4}></Counter>
+      <Island>
+        <Counter $count={4}></Counter>
       </Island>
       <h2>Counter 2</h2>
-      <Island pathToComponent="/src/islands/Counter.tsx">
-        <Counter initialCount={2}></Counter>
+      <Island>
+        <Counter $count={2}></Counter>
       </Island>
     </>
   );
@@ -54,8 +52,8 @@ app.get('/todos', (c) => {
     { head: 'Build todo app', done: false },
   ];
   return c.render(
-    <Island pathToComponent="/src/islands/TodoApp.tsx">
-      <TodoApp _todos={todos}></TodoApp>
+    <Island>
+      <TodoApp $todos={todos}></TodoApp>
     </Island>
   );
 });

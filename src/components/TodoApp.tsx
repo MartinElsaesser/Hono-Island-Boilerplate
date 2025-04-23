@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { useInput } from '../lib/useInput.js';
+import { useInput } from '../hooks/useInput.js';
 
 export type Todo = {
   head: string;
   done: boolean;
 };
 
-export default function TodoApp({ _todos }: { _todos: Todo[] }) {
+export default function TodoApp({ $todos }: { $todos: Todo[] }) {
   const inputTodo = useInput('');
-  const [todos, setTodos] = useState<Todo[]>(_todos);
+  const [todos, setTodos] = useState<Todo[]>($todos);
 
   function handleAddTodo(): void {
     if (inputTodo.value.length < 1) return;
