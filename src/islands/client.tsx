@@ -7,7 +7,7 @@ import { parse } from 'superjson';
 import { createRoot } from 'react-dom/client';
 import { jsx } from 'react/jsx-runtime';
 
-// get zod schemas for validating island information
+// zod schemas for validating island information
 import { z } from 'zod';
 
 export const islandIndexSchema = z
