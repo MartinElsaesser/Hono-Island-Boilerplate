@@ -1,5 +1,6 @@
 import React from 'react';
 import { registeredIslands } from './shared.js';
+import superjson from 'superjson';
 
 export default function Island({ children }: { children: React.ReactElement }) {
   try {
@@ -28,7 +29,7 @@ export default function Island({ children }: { children: React.ReactElement }) {
     return (
       <div
         data-hydration-island-idx={islandIdx}
-        data-hydration-props={JSON.stringify(children.props)}
+        data-hydration-props={superjson.stringify(children.props)}
       >
         {children}
       </div>
