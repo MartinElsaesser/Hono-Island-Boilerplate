@@ -1,30 +1,30 @@
 // @ts-check
-import * as esbuild from 'esbuild';
+import * as esbuild from "esbuild";
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
-  entryPoints: ['src/islands/client.tsx'],
-  bundle: true,
-  minify: false,
-  format: 'esm',
-  outdir: '/static/js/build',
-  chunkNames: '[name]-[hash]',
-  splitting: true,
+	entryPoints: ["src/islands/client.tsx"],
+	bundle: true,
+	minify: false,
+	format: "esm",
+	outdir: "/static/js/build",
+	chunkNames: "[name]-[hash]",
+	splitting: true,
 };
 
 ///////////////////////
 // start esbuild
-const startInDevMode = process.argv.includes('--watch');
+const startInDevMode = process.argv.includes("--watch");
 
 if (startInDevMode) {
-  console.log('Started watch mode for client files');
+	console.log("Started watch mode for client files");
 
-  // watch and re-transpile typescript files on change
-  let ctx = await esbuild.context(buildOptions);
-  await ctx.watch();
+	// watch and re-transpile typescript files on change
+	let ctx = await esbuild.context(buildOptions);
+	await ctx.watch();
 } else {
-  console.log('Building client files');
+	console.log("Building client files");
 
-  // transpile typescript files
-  let ctx = await esbuild.build(buildOptions);
+	// transpile typescript files
+	let ctx = await esbuild.build(buildOptions);
 }
