@@ -6,7 +6,7 @@
 			"detail": "Build client and server before debugging",
 			"type": "npm",
 			"script": "build",
-			"problemMatcher": [],
+			"problemMatcher": []
 		}
 	]
 }

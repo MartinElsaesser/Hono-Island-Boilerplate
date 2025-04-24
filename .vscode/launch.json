@@ -8,12 +8,10 @@
 			"name": "Current TS/TSX file",
 			"type": "node",
 			"request": "launch",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
+			"skipFiles": ["<node_internals>/**"],
 			"preLaunchTask": "npm:prepare-debug",
 			"program": "${file}",
-			"outFiles": [ "${workspaceFolder}/dist/**/*.js" ],
+			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
 		}
 	]
 }

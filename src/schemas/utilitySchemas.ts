@@ -1,6 +1,6 @@
-import z from 'zod';
+import z from "zod";
 
 export const stringToIntegerSchema = z
-  .string()
-  .regex(/^\d+$/)
-  .transform((val) => parseInt(val, 10));
+	.string()
+	.regex(/^\d+$/)
+	.transform(val => parseInt(val, 10));
