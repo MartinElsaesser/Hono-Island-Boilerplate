@@ -1,5 +1,6 @@
 import React from 'react';
 import { registeredIslands } from './shared.js';
+import superjson from 'superjson';
 
 export default function Island({ children }: { children: React.ReactElement }) {
   try {
@@ -16,10 +17,10 @@ export default function Island({ children }: { children: React.ReactElement }) {
     }
 
     // check if children is a registered island
-    const islandIdx = registeredIslands.findIndex(
+    const islandIndex = registeredIslands.findIndex(
       (island) => island === children.type
     );
-    if (islandIdx === -1) {
+    if (islandIndex === -1) {
       throw new Error(
         `Island component "${children.type.name}" is not registered as an island. Please add it to the registeredIslands array.`
       );
@@ -27,8 +28,8 @@ export default function Island({ children }: { children: React.ReactElement }) {
 
     return (
       <div
-        data-hydration-island-idx={islandIdx}
-        data-hydration-props={JSON.stringify(children.props)}
+        data-island-index={islandIndex}
+        data-island-props={superjson.stringify(children.props)}
       >
         {children}
       </div>
