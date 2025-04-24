@@ -16,7 +16,7 @@ export const islandIndexSchema = z
   .transform((val) => parseInt(val, 10))
   .refine((index) => registeredIslands[index] !== undefined);
 
-export const propsSchema = z.string().transform((val) => parse(val));
+export const islandPropsSchema = z.string().transform((val) => parse(val));
 
 // --- code for hydration, i.e. rendering islands on the client
 // get all html elements that wrap islands
@@ -30,17 +30,18 @@ if (islandWrappers.length > 0) {
     // island index will tell us which island to render
     // props will be used to achieve the same state as on the server
 
-    const rawIslandIdx = wrapper.getAttribute('data-island-index');
-    const { data: islandIdx, error: error1 } =
-      islandIndexSchema.safeParse(rawIslandIdx);
-    if (error1) throw new Error(`Invalid island index: ${rawIslandIdx}`);
+    const rawIslandIndex = wrapper.getAttribute('data-island-index');
+    const { data: islandIndex, error: error1 } =
+      islandIndexSchema.safeParse(rawIslandIndex);
+    if (error1) throw new Error(`Invalid island index: ${rawIslandIndex}`);
 
     const rawProps = wrapper.getAttribute('data-island-props');
-    const { data: props, error: error2 } = propsSchema.safeParse(rawProps);
+    const { data: props, error: error2 } =
+      islandPropsSchema.safeParse(rawProps);
     if (error2) throw new Error(`Empty props: ${rawProps}`);
 
     // find matching island in the islands object
-    const island = registeredIslands[islandIdx];
+    const island = registeredIslands[islandIndex];
 
     const root = createRoot(wrapper);
     root.render(jsx(island, props));
