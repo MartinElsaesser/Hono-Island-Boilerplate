@@ -28,8 +28,8 @@ export default function Island({ children }: { children: React.ReactElement }) {
 
     return (
       <div
-        data-hydration-island-idx={islandIdx}
-        data-hydration-props={superjson.stringify(children.props)}
+        data-island-index={islandIdx}
+        data-island-props={superjson.stringify(children.props)}
       >
         {children}
       </div>
