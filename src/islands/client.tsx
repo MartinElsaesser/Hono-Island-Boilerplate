@@ -17,7 +17,7 @@ export const islandSchema = z.object({
 });
 
 export function registerIsland(component: Function, fileUrl: string) {
-	const path = resolveBuildPath(fileUrl);
+	const path = resolveComponentBuildPath(fileUrl);
 	component.import = component.name;
 	component.path = path;
 
@@ -45,9 +45,24 @@ export function registerIsland(component: Function, fileUrl: string) {
 	}
 }
 
-function resolveBuildPath(path: string) {
+/**
+ * This function takes in a react component's file URL.\
+ * Those file URLs can come from server and client.\
+ * Regardless of where the code is running, it resolves the file URL to the same path.\
+ * This path is used to load the component's javascript on the client side and to hydrate it.\
+ * @example
+ * // Shows the different URLs for server and client:
+ * // Both URLs will resolve to the same path.
+ * const server = "file:///C:/Users/.../src/components/Counter.tsx";
+ * const client = "http://localhost:3000/static/build/Counter.js";
+ * const path = "/static/build/Counter.js";
+ *
+ * @param path - The file URL of the component.
+ * @returns The resolved path for the component.
+ */
+function resolveComponentBuildPath(path: string) {
 	if (runsOnServer()) {
-		// server: file:///C:/Users/marel/Programming/Typescript/zod-playground/Hono-Island-Boilerplate/src/components/Counter.tsx
+		// server: file:///C:/Users/.../src/components/Counter.tsx
 		const regex = /^file:.*src\/components\//;
 		const resolvedPath = path.replace(regex, "/static/build/").replace(/\.tsx$/, ".js");
 		return resolvedPath;
