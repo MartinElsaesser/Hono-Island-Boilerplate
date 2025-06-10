@@ -6,7 +6,7 @@
 		"client-build": "node build-islands.mjs",
 		"server-dev": "tsx watch --clear-screen=false src/server.tsx",
 		"server-build": "tsc",
-		"dev": "concurrently -n client,server💻 \"npm:client-dev\" \"npm:server-dev\"",
+		"dev": "concurrently --hide=\"0\" --prefix=\"none\"  \"npm:client-dev\" \"npm:server-dev\"",
 		"build": "npm run client-build && npm run server-build",
 		"start": "node dist/server",
 		"prettier:fix": "prettier --write .",

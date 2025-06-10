@@ -22,6 +22,7 @@ export default function Island({ children }: { children: React.ReactElement }) {
 				data-island-import={children.type.import}
 			>
 				{children}
+				<script src={children.type.path} type="module"></script>
 			</div>
 		);
 	} catch (error: unknown) {
