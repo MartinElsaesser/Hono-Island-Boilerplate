@@ -20,10 +20,7 @@ app.get(
 					<head>
 						<link rel="stylesheet" href="/static/css/app.css" />
 					</head>
-					<body>
-						{children}
-						<script type="module" src="/static/js/build/client.js"></script>
-					</body>
+					<body>{children}</body>
 				</html>
 			);
 		},
