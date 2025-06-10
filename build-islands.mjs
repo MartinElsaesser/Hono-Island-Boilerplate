@@ -3,11 +3,11 @@ import * as esbuild from "esbuild";
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
-	entryPoints: ["src/islands/client.tsx"],
+	entryPoints: ["src/components/**/*.tsx"],
 	bundle: true,
 	minify: false,
 	format: "esm",
-	outdir: "/static/js/build",
+	outdir: "/static/build",
 	chunkNames: "[name]-[hash]",
 	splitting: true,
 };
