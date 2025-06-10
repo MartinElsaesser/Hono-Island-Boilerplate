@@ -1,17 +1,11 @@
-// --- imports
-// provide necessary imports to render islands on the client
 import { runsOnServer } from "../lib/runsOnServer.js";
 import { parse } from "superjson";
 import { createRoot } from "react-dom/client";
 import { jsx } from "react/jsx-runtime";
-
-// zod schemas for validating island information
 import { z } from "zod";
 
-export const islandPropsSchema = z.string().transform(val => parse(val));
-
 export const islandSchema = z.object({
-	islandProps: islandPropsSchema,
+	islandProps: z.string().transform(val => parse(val)),
 	islandPath: z.string().min(1),
 	islandImport: z.string().min(1),
 });
