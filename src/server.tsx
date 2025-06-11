@@ -13,6 +13,8 @@ import {
 	TestCounter4,
 	TestCounter5,
 	TestCounter6,
+	TestCounter7,
+	TestCounter8,
 } from "./components/TestComponents.js";
 
 const app = new Hono();
@@ -76,6 +78,14 @@ app.get("/test-components", c => {
 			<h2>Test Counter 6</h2>
 			<Island>
 				<TestCounter6></TestCounter6>
+			</Island>
+			<h2>Test Counter 7</h2>
+			<Island>
+				<TestCounter7></TestCounter7>
+			</Island>
+			<h2>Test Counter 8</h2>
+			<Island>
+				<TestCounter8></TestCounter8>
 			</Island>
 		</>
 	);

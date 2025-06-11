@@ -26,9 +26,39 @@ export class TestCounter3 extends Component<{}, { count: number }> {
 	};
 }
 
-export const TestCounter4 = TestCounter1;
-export const TestCounter5 = TestCounter2;
-export const TestCounter6 = TestCounter3;
+export const TestCounter4 = function () {
+	const [count, setCount] = useState(0);
+
+	return <button onClick={e => setCount(c => c + 1)}>{count} (+1)</button>;
+};
+
+function createComponent1() {
+	return function () {
+		const [count, setCount] = useState(0);
+
+		return <button onClick={e => setCount(c => c + 1)}>{count} (+1)</button>;
+	};
+}
+function createComponent2() {
+	return () => {
+		const [count, setCount] = useState(0);
+
+		return <button onClick={e => setCount(c => c + 1)}>{count} (+1)</button>;
+	};
+}
+function createComponent3() {
+	return function Component() {
+		const [count, setCount] = useState(0);
+
+		return <button onClick={e => setCount(c => c + 1)}>{count} (+1)</button>;
+	};
+}
+
+export const TestCounter5 = TestCounter1;
+
+export const TestCounter6 = createComponent1();
+export const TestCounter7 = createComponent2();
+export const TestCounter8 = createComponent3();
 
 registerIsland(TestCounter1, import.meta.url);
 registerIsland(TestCounter2, import.meta.url);
@@ -36,3 +66,5 @@ registerIsland(TestCounter3, import.meta.url);
 registerIsland(TestCounter4, import.meta.url);
 registerIsland(TestCounter5, import.meta.url);
 registerIsland(TestCounter6, import.meta.url);
+registerIsland(TestCounter7, import.meta.url);
+registerIsland(TestCounter8, import.meta.url);
