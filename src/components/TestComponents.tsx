@@ -1,5 +1,5 @@
 import { useState, Component } from "react";
-import { registerIsland } from "../islands/client.js";
+import { registerIslands } from "../islands/client.js";
 
 export function TestCounter1() {
 	const [count, setCount] = useState(0);
@@ -60,15 +60,16 @@ export const TestCounter6 = createComponent1();
 export const TestCounter7 = createComponent2();
 export const TestCounter8 = createComponent3();
 
-registerIsland(TestCounter1, import.meta);
-registerIsland(TestCounter2, import.meta);
-registerIsland(TestCounter3, import.meta);
-registerIsland(TestCounter4, import.meta);
-registerIsland(TestCounter5, import.meta);
-registerIsland(TestCounter6, import.meta);
-registerIsland(TestCounter7, import.meta);
-registerIsland(TestCounter8, import.meta);
-
-const a: ImportMeta = import.meta;
-type lel = ImportMeta;
-type debug = typeof a;
+registerIslands({
+	meta: import.meta,
+	components: [
+		TestCounter1,
+		TestCounter2,
+		TestCounter3,
+		TestCounter4,
+		TestCounter5,
+		TestCounter6,
+		TestCounter7,
+		TestCounter8,
+	] satisfies Function[],
+});

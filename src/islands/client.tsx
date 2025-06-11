@@ -14,23 +14,30 @@ let islands: Record<string, number> = {};
 // TODO: change this to accept a list of components, so that each component is only hydrated once
 // TODO: allow only one call per file
 // TODO: validate that the component is a valid react component
-export function registerIsland(component: Function, import_meta: ImportMeta) {
-	const fileUrl = import_meta.url;
-	const islandBuildPath = resolveComponentBuildPath(fileUrl);
-	const islandIndex = (islands[fileUrl] = (islands[fileUrl] ?? -1) + 1);
+export function registerIslands({
+	components,
+	meta,
+}: {
+	components: Function[];
+	meta: ImportMeta;
+}) {
+	const islandBuildPath = resolveComponentBuildPath(meta.url);
 
-	if (component.islandIndex === undefined) {
-		Object.defineProperty(component, "islandIndex", {
-			value: islandIndex,
-			writable: false,
-			enumerable: true,
-		});
-		Object.defineProperty(component, "islandBuildPath", {
-			value: islandBuildPath,
-			writable: false,
-			enumerable: true,
-		});
-	}
+	components.forEach((component, islandIndex) => {
+		// TODO: validate that the component is a valid react component
+		if (component.islandIndex === undefined) {
+			Object.defineProperty(component, "islandIndex", {
+				value: islandIndex,
+				writable: false,
+				enumerable: true,
+			});
+			Object.defineProperty(component, "islandBuildPath", {
+				value: islandBuildPath,
+				writable: false,
+				enumerable: true,
+			});
+		}
+	});
 
 	if (!runsOnServer()) {
 		// client-side rendering
@@ -45,17 +52,18 @@ export function registerIsland(component: Function, import_meta: ImportMeta) {
 			// island index will tell us which island to render
 			// props will be used to achieve the same state as on the server
 
-			console.log(wrapper.dataset);
-
 			const { islandIndex, islandBuildPath, islandProps } = islandSchema.parse(
 				wrapper.dataset
 			);
+
+			const component = components[islandIndex];
 			if (
-				islandIndex !== component.islandIndex ||
-				islandBuildPath !== component.islandBuildPath
+				component.islandIndex === islandIndex &&
+				component.islandBuildBuildPath === islandBuildPath
 			)
 				continue;
-			// find matching island in the islands object
+
+			console.log(islandIndex, wrapper);
 
 			const root = createRoot(wrapper);
 			root.render(jsx(component, islandProps));

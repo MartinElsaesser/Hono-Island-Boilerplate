@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerIsland } from "../islands/client.js";
+import { registerIslands } from "../islands/client.js";
 
 export default function Counter({ $count }: { $count: number }) {
 	const [count, setCount] = useState($count);
@@ -15,4 +15,7 @@ export default function Counter({ $count }: { $count: number }) {
 	);
 }
 
-registerIsland(Counter, import.meta);
+registerIslands({
+	components: [Counter],
+	meta: import.meta,
+});
