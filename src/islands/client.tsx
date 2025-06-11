@@ -15,14 +15,14 @@ let calledInFiles = new Set<string>();
 export const ISLAND_INDEX = "islandIndex";
 export const ISLAND_BUILD_PATH = "islandBuildPath";
 
-type IslandComponentInformation = {
+type IslandInformation = {
 	islandIndex: number;
 	islandBuildPath: string;
 };
 
-type IslandComponent = ComponentType<any> & IslandComponentInformation;
-type UnfinishedIslandComponent = ComponentType<any> & Partial<IslandComponentInformation>;
-type a = Partial<IslandComponentInformation>;
+type IslandComponent = ComponentType<any> & IslandInformation;
+type MaybeIslandComponent = ComponentType<any> & Partial<IslandInformation>;
+type a = Partial<IslandInformation>;
 
 export function isIslandComponent(value: any): value is IslandComponent {
 	return (
@@ -32,7 +32,7 @@ export function isIslandComponent(value: any): value is IslandComponent {
 	);
 }
 
-function isUnfinishedIslandComponent(value: any): value is UnfinishedIslandComponent {
+function maybeIslandComponent(value: any): value is MaybeIslandComponent {
 	return (
 		typeof value === "function" &&
 		(typeof value.islandIndex === "number" || typeof value.islandIndex === "undefined") &&
@@ -59,7 +59,7 @@ export function registerIslands({
 
 	const islandComponents = components.map((component, islandIndex) => {
 		// TODO: validate that the component is a valid react component
-		if (!isUnfinishedIslandComponent(component)) {
+		if (!maybeIslandComponent(component)) {
 			throw new Error(`Component at index ${islandIndex} is not a valid island component.`);
 		}
 		if (component[ISLAND_INDEX] === undefined) {
