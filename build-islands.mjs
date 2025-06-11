@@ -6,6 +6,7 @@ const buildOptions = {
 	entryPoints: ["src/components/**/*.tsx"],
 	bundle: true,
 	minify: false,
+	sourcemap: "inline",
 	format: "esm",
 	outdir: "/static/build",
 	chunkNames: "[name]-[hash]",
