@@ -71,5 +71,5 @@ registerIslands({
 		TestCounter6,
 		TestCounter7,
 		TestCounter8,
-	] satisfies Function[],
+	],
 });
