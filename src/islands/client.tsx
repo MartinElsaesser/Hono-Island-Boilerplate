@@ -1,10 +1,8 @@
 import { runsOnServer } from "../lib/runsOnServer.js";
 import { parse } from "superjson";
 import { createRoot } from "react-dom/client";
-import { jsx } from "react/jsx-runtime";
 import { z } from "zod";
-import { ComponentType, FC, isValidElement, ReactElement, ReactNode } from "react";
-import Counter from "../components/Counter.js";
+import { ComponentType } from "react";
 
 export const islandSchema = z.object({
 	islandProps: z.string().transform(val => parse(val)),
