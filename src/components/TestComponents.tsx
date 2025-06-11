@@ -1,4 +1,5 @@
 import { useState, Component } from "react";
+import { registerIsland } from "../islands/client.js";
 
 export function TestCounter1() {
 	const [count, setCount] = useState(0);
@@ -28,3 +29,10 @@ export class TestCounter3 extends Component<{}, { count: number }> {
 export const TestCounter4 = TestCounter1;
 export const TestCounter5 = TestCounter2;
 export const TestCounter6 = TestCounter3;
+
+registerIsland(TestCounter1, import.meta.url);
+registerIsland(TestCounter2, import.meta.url);
+registerIsland(TestCounter3, import.meta.url);
+registerIsland(TestCounter4, import.meta.url);
+registerIsland(TestCounter5, import.meta.url);
+registerIsland(TestCounter6, import.meta.url);
