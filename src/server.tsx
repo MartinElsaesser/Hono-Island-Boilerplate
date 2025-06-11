@@ -6,6 +6,14 @@ import { reactRenderer } from "@hono/react-renderer";
 import TodoApp, { type Todo } from "./components/TodoApp.js";
 import Counter from "./components/Counter.js";
 import Island from "./islands/server.js";
+import {
+	TestCounter1,
+	TestCounter2,
+	TestCounter3,
+	TestCounter4,
+	TestCounter5,
+	TestCounter6,
+} from "./components/TestComponents.js";
 
 const app = new Hono();
 
@@ -37,6 +45,37 @@ app.get("/", c => {
 			<h2>Counter 2</h2>
 			<Island>
 				<Counter $count={2}></Counter>
+			</Island>
+		</>
+	);
+});
+
+app.get("/test-components", c => {
+	return c.render(
+		<>
+			<h2>Test Counter 1</h2>
+			<Island>
+				<TestCounter1></TestCounter1>
+			</Island>
+			<h2>Test Counter 2</h2>
+			<Island>
+				<TestCounter2></TestCounter2>
+			</Island>
+			<h2>Test Counter 3</h2>
+			<Island>
+				<TestCounter3></TestCounter3>
+			</Island>
+			<h2>Test Counter 4</h2>
+			<Island>
+				<TestCounter4></TestCounter4>
+			</Island>
+			<h2>Test Counter 5</h2>
+			<Island>
+				<TestCounter5></TestCounter5>
+			</Island>
+			<h2>Test Counter 6</h2>
+			<Island>
+				<TestCounter6></TestCounter6>
 			</Island>
 		</>
 	);
