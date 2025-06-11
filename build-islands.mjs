@@ -3,6 +3,7 @@ import * as esbuild from "esbuild";
 
 /** @type {import('esbuild').BuildOptions} */
 const buildOptions = {
+	// TODO: should .ts, .jsx, .js also be included?
 	entryPoints: ["src/components/**/*.tsx"],
 	bundle: true,
 	minify: false,
