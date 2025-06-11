@@ -1,12 +1,12 @@
 import React from "react";
 import superjson from "superjson";
-import { ISLAND_BUILD_PATH, ISLAND_INDEX } from "./client.js";
+import { isIslandComponent, ISLAND_BUILD_PATH, ISLAND_INDEX } from "./client.js";
 
 export default function Island({ children }: { children: React.ReactElement }) {
 	try {
 		// TODO: use zod for validation
 		// - check that children is a valid react element (functional component or class component)
-		// - check that path and import are valid strings
+		// - check that islandBuildPath and islandIndex are valid strings
 		// - check props? (maybe not necessary, since props are passed as-is)
 
 		// TODO: use zod for casting: the component should be cast in a way that import and path are added to the component type
@@ -21,7 +21,7 @@ export default function Island({ children }: { children: React.ReactElement }) {
 		}
 
 		// throw error if children is not a functional component
-		if (typeof children.type !== "function") {
+		if (!isIslandComponent(children.type)) {
 			throw new Error(`Island component "${children.type}" is not a functional component`);
 		}
 
