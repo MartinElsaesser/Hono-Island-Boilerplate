@@ -3,6 +3,8 @@ import { parse } from "superjson";
 import { createRoot } from "react-dom/client";
 import { jsx } from "react/jsx-runtime";
 import { z } from "zod";
+import { ComponentType, FC, isValidElement, ReactElement, ReactNode } from "react";
+import Counter from "../components/Counter.js";
 
 export const islandSchema = z.object({
 	islandProps: z.string().transform(val => parse(val)),
@@ -15,13 +17,26 @@ let calledInFiles = new Set<string>();
 export const ISLAND_INDEX = "islandIndex";
 export const ISLAND_BUILD_PATH = "islandBuildPath";
 
+type IslandComponent = ComponentType<any> & {
+	islandIndex?: number;
+	islandBuildPath?: string;
+};
+
+function isIslandComponent(value: any): value is IslandComponent {
+	return (
+		typeof value === "function" &&
+		(typeof value.islandIndex === "number" || typeof value.islandIndex === "undefined") &&
+		(typeof value.islandBuildPath === "string" || typeof value.islandBuildPath === "undefined")
+	);
+}
+
 // TODO: change this to accept a list of components, so that each component is only hydrated once
 // TODO: validate that the component is a valid react component
 export function registerIslands({
 	components,
 	meta,
 }: {
-	components: Function[];
+	components: ComponentType<any>[];
 	meta: ImportMeta;
 }) {
 	const islandBuildPath = resolveComponentBuildPath(meta.url);
@@ -32,8 +47,11 @@ export function registerIslands({
 	}
 	calledInFiles.add(meta.url);
 
-	components.forEach((component, islandIndex) => {
+	const islandComponents = components.map((component, islandIndex) => {
 		// TODO: validate that the component is a valid react component
+		if (!isIslandComponent(component)) {
+			throw new Error(`Component at index ${islandIndex} is not a valid island component.`);
+		}
 		if (component[ISLAND_INDEX] === undefined) {
 			Object.defineProperty(component, ISLAND_INDEX, {
 				value: islandIndex,
@@ -46,12 +64,15 @@ export function registerIslands({
 				enumerable: true,
 			});
 		}
+		return component;
 	});
 
 	if (!runsOnServer()) {
 		// client-side rendering
 		// get all html elements that wrap islands
-		const islandWrappers = Array.from(document.querySelectorAll("[data-island-build-path]"));
+		const islandWrappers = Array.from(
+			document.querySelectorAll("[data-island-build-path]")
+		) as HTMLElement[];
 
 		for (const wrapper of islandWrappers) {
 			// get island index and props from the wrapper element
@@ -62,18 +83,18 @@ export function registerIslands({
 				wrapper.dataset
 			);
 
-			const component = components[islandIndex];
+			const Component = islandComponents[islandIndex];
 
 			if (
-				component === undefined ||
-				component[ISLAND_INDEX] !== islandIndex ||
-				component[ISLAND_BUILD_PATH] !== islandBuildPath
+				Component === undefined ||
+				Component.islandIndex !== islandIndex ||
+				Component.islandBuildPath !== islandBuildPath
 			) {
 				continue;
 			}
 
 			const root = createRoot(wrapper);
-			root.render(jsx(component, islandProps));
+			root.render(<Component {...islandProps} />);
 		}
 	}
 }
