@@ -7,13 +7,25 @@ import { z } from "zod";
 export const islandSchema = z.object({
 	islandProps: z.string().transform(val => parse(val)),
 	islandPath: z.string().min(1),
-	islandImport: z.string().min(1),
+	islandImport: z.coerce.number(),
 });
-
+let islands: Record<string, number> = {};
 export function registerIsland(component: Function, fileUrl: string) {
 	const path = resolveComponentBuildPath(fileUrl);
-	component.import = component.name;
-	component.path = path;
+	const importPath = (islands[fileUrl] = (islands[fileUrl] ?? -1) + 1);
+
+	if (component.import === undefined) {
+		Object.defineProperty(component, "import", {
+			value: importPath,
+			writable: false,
+			enumerable: true,
+		});
+		Object.defineProperty(component, "path", {
+			value: path,
+			writable: false,
+			enumerable: true,
+		});
+	}
 
 	if (!runsOnServer()) {
 		// client-side rendering
