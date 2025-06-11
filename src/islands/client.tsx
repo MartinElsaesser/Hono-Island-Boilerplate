@@ -9,10 +9,10 @@ export const islandSchema = z.object({
 	islandBuildPath: z.string().min(1),
 	islandIndex: z.coerce.number(), // TODO: improve this to be safer
 });
-let islands: Record<string, number> = {};
+
+let calledInFiles = new Set<string>();
 
 // TODO: change this to accept a list of components, so that each component is only hydrated once
-// TODO: allow only one call per file
 // TODO: validate that the component is a valid react component
 export function registerIslands({
 	components,
@@ -22,6 +22,12 @@ export function registerIslands({
 	meta: ImportMeta;
 }) {
 	const islandBuildPath = resolveComponentBuildPath(meta.url);
+
+	// ensure that registerIslands is called only once per file
+	if (calledInFiles.has(meta.url)) {
+		throw new Error(`registerIslands was called multiple times in the same file`);
+	}
+	calledInFiles.add(meta.url);
 
 	components.forEach((component, islandIndex) => {
 		// TODO: validate that the component is a valid react component
