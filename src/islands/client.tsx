@@ -14,7 +14,8 @@ let islands: Record<string, number> = {};
 // TODO: change this to accept a list of components, so that each component is only hydrated once
 // TODO: allow only one call per file
 // TODO: validate that the component is a valid react component
-export function registerIsland(component: Function, fileUrl: string) {
+export function registerIsland(component: Function, import_meta: ImportMeta) {
+	const fileUrl = import_meta.url;
 	const islandBuildPath = resolveComponentBuildPath(fileUrl);
 	const islandIndex = (islands[fileUrl] = (islands[fileUrl] ?? -1) + 1);
 

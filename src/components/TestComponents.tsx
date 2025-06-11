@@ -60,11 +60,15 @@ export const TestCounter6 = createComponent1();
 export const TestCounter7 = createComponent2();
 export const TestCounter8 = createComponent3();
 
-registerIsland(TestCounter1, import.meta.url);
-registerIsland(TestCounter2, import.meta.url);
-registerIsland(TestCounter3, import.meta.url);
-registerIsland(TestCounter4, import.meta.url);
-registerIsland(TestCounter5, import.meta.url);
-registerIsland(TestCounter6, import.meta.url);
-registerIsland(TestCounter7, import.meta.url);
-registerIsland(TestCounter8, import.meta.url);
+registerIsland(TestCounter1, import.meta);
+registerIsland(TestCounter2, import.meta);
+registerIsland(TestCounter3, import.meta);
+registerIsland(TestCounter4, import.meta);
+registerIsland(TestCounter5, import.meta);
+registerIsland(TestCounter6, import.meta);
+registerIsland(TestCounter7, import.meta);
+registerIsland(TestCounter8, import.meta);
+
+const a: ImportMeta = import.meta;
+type lel = ImportMeta;
+type debug = typeof a;

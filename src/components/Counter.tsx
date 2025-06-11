@@ -15,4 +15,4 @@ export default function Counter({ $count }: { $count: number }) {
 	);
 }
 
-registerIsland(Counter, import.meta.url);
+registerIsland(Counter, import.meta);
