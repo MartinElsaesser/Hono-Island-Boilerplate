@@ -12,6 +12,9 @@ export const islandSchema = z.object({
 
 let calledInFiles = new Set<string>();
 
+export const ISLAND_INDEX = "islandIndex";
+export const ISLAND_BUILD_PATH = "islandBuildPath";
+
 // TODO: change this to accept a list of components, so that each component is only hydrated once
 // TODO: validate that the component is a valid react component
 export function registerIslands({
@@ -31,13 +34,13 @@ export function registerIslands({
 
 	components.forEach((component, islandIndex) => {
 		// TODO: validate that the component is a valid react component
-		if (component.islandIndex === undefined) {
-			Object.defineProperty(component, "islandIndex", {
+		if (component[ISLAND_INDEX] === undefined) {
+			Object.defineProperty(component, ISLAND_INDEX, {
 				value: islandIndex,
 				writable: false,
 				enumerable: true,
 			});
-			Object.defineProperty(component, "islandBuildPath", {
+			Object.defineProperty(component, ISLAND_BUILD_PATH, {
 				value: islandBuildPath,
 				writable: false,
 				enumerable: true,
@@ -47,9 +50,6 @@ export function registerIslands({
 
 	if (!runsOnServer()) {
 		// client-side rendering
-		console.log("testing client-side rendering");
-
-		// --- code for hydration, i.e. rendering islands on the client
 		// get all html elements that wrap islands
 		const islandWrappers = Array.from(document.querySelectorAll("[data-island-build-path]"));
 
@@ -63,13 +63,14 @@ export function registerIslands({
 			);
 
 			const component = components[islandIndex];
-			if (
-				component.islandIndex === islandIndex &&
-				component.islandBuildBuildPath === islandBuildPath
-			)
-				continue;
 
-			console.log(islandIndex, wrapper);
+			if (
+				component === undefined ||
+				component[ISLAND_INDEX] !== islandIndex ||
+				component[ISLAND_BUILD_PATH] !== islandBuildPath
+			) {
+				continue;
+			}
 
 			const root = createRoot(wrapper);
 			root.render(jsx(component, islandProps));
@@ -101,7 +102,6 @@ function resolveComponentBuildPath(path: string) {
 	} else {
 		// client: http://localhost:3000/static/build/Counter.js
 		const resolvedPath = path.replace(location.origin, "");
-		console.log(resolvedPath);
 		return resolvedPath;
 	}
 }

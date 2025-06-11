@@ -1,5 +1,6 @@
 import React from "react";
 import superjson from "superjson";
+import { ISLAND_BUILD_PATH, ISLAND_INDEX } from "./client.js";
 
 export default function Island({ children }: { children: React.ReactElement }) {
 	try {
@@ -27,11 +28,11 @@ export default function Island({ children }: { children: React.ReactElement }) {
 		return (
 			<div
 				data-island-props={superjson.stringify(children.props)}
-				data-island-build-path={children.type.islandBuildPath}
-				data-island-index={children.type.islandIndex}
+				data-island-build-path={children.type[ISLAND_BUILD_PATH]}
+				data-island-index={children.type[ISLAND_INDEX]}
 			>
 				{children}
-				<script src={children.type.islandBuildPath} type="module"></script>
+				<script src={children.type[ISLAND_BUILD_PATH]} type="module"></script>
 			</div>
 		);
 	} catch (error: unknown) {
