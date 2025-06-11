@@ -6,22 +6,26 @@ import { z } from "zod";
 
 export const islandSchema = z.object({
 	islandProps: z.string().transform(val => parse(val)),
-	islandPath: z.string().min(1),
-	islandImport: z.coerce.number(),
+	islandBuildPath: z.string().min(1),
+	islandIndex: z.coerce.number(), // TODO: improve this to be safer
 });
 let islands: Record<string, number> = {};
-export function registerIsland(component: Function, fileUrl: string) {
-	const path = resolveComponentBuildPath(fileUrl);
-	const importPath = (islands[fileUrl] = (islands[fileUrl] ?? -1) + 1);
 
-	if (component.import === undefined) {
-		Object.defineProperty(component, "import", {
-			value: importPath,
+// TODO: change this to accept a list of components, so that each component is only hydrated once
+// TODO: allow only one call per file
+// TODO: validate that the component is a valid react component
+export function registerIsland(component: Function, fileUrl: string) {
+	const islandBuildPath = resolveComponentBuildPath(fileUrl);
+	const islandIndex = (islands[fileUrl] = (islands[fileUrl] ?? -1) + 1);
+
+	if (component.islandIndex === undefined) {
+		Object.defineProperty(component, "islandIndex", {
+			value: islandIndex,
 			writable: false,
 			enumerable: true,
 		});
-		Object.defineProperty(component, "path", {
-			value: path,
+		Object.defineProperty(component, "islandBuildPath", {
+			value: islandBuildPath,
 			writable: false,
 			enumerable: true,
 		});
@@ -33,16 +37,23 @@ export function registerIsland(component: Function, fileUrl: string) {
 
 		// --- code for hydration, i.e. rendering islands on the client
 		// get all html elements that wrap islands
-		const islandWrappers = Array.from(document.querySelectorAll("[data-island-path]"));
+		const islandWrappers = Array.from(document.querySelectorAll("[data-island-build-path]"));
 
 		for (const wrapper of islandWrappers) {
 			// get island index and props from the wrapper element
 			// island index will tell us which island to render
 			// props will be used to achieve the same state as on the server
 
-			const { islandImport, islandPath, islandProps } = islandSchema.parse(wrapper.dataset);
-			if (islandImport !== component.import || islandPath !== component.path) continue;
+			console.log(wrapper.dataset);
 
+			const { islandIndex, islandBuildPath, islandProps } = islandSchema.parse(
+				wrapper.dataset
+			);
+			if (
+				islandIndex !== component.islandIndex ||
+				islandBuildPath !== component.islandBuildPath
+			)
+				continue;
 			// find matching island in the islands object
 
 			const root = createRoot(wrapper);

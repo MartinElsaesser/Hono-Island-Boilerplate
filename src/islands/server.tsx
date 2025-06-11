@@ -27,11 +27,11 @@ export default function Island({ children }: { children: React.ReactElement }) {
 		return (
 			<div
 				data-island-props={superjson.stringify(children.props)}
-				data-island-path={children.type.path}
-				data-island-import={children.type.import}
+				data-island-build-path={children.type.islandBuildPath}
+				data-island-index={children.type.islandIndex}
 			>
 				{children}
-				<script src={children.type.path} type="module"></script>
+				<script src={children.type.islandBuildPath} type="module"></script>
 			</div>
 		);
 	} catch (error: unknown) {
