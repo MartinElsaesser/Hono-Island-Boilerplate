@@ -16,6 +16,7 @@ import {
 	TestCounter7,
 	TestCounter8,
 } from "./components/TestComponents.js";
+import { buildIslands } from "./lib/islands/buildIslands.js";
 
 const app = new Hono();
 
@@ -109,7 +110,9 @@ app.get("/todos", c => {
 });
 
 const port = 3000;
+
 const server = serve({ fetch: app.fetch, port }, info => {
+	buildIslands();
 	console.log(`Server started on http://localhost:${port}`);
 });
 
