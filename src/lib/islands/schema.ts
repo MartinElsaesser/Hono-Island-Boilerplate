@@ -40,6 +40,9 @@ export const maybeIslandComponentSchema = intersectAnyWithObject({
 	objectSchema: islandInfoSchema.partial(),
 });
 
+export type IslandComponent = z.infer<typeof islandComponentSchema>;
+export type MaybeIslandComponent = z.infer<typeof maybeIslandComponentSchema>;
+
 export const wrapperSchema = z.object({
 	islandProps: z.string().transform(val => parse(val)),
 	islandBuildPath: z.string().min(1),

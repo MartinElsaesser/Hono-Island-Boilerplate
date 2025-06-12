@@ -1,6 +1,6 @@
-import React, { createContext, use, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import superjson from "superjson";
-import { isIslandComponent } from "./shared.js";
+import { isIslandComponent } from "./utils/shared.js";
 import { ISLAND_BUILD_PATH, ISLAND_INDEX } from "./schema.js";
 
 const RegistrationContext = createContext(false);

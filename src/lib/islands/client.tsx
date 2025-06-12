@@ -1,10 +1,9 @@
 import { hydrateRoot } from "react-dom/client";
-import { z } from "zod";
-import { islandComponentSchema, wrapperSchema } from "./schema.js";
+import { IslandComponent, wrapperSchema } from "./schema.js";
 
 export function hydrateIslandComponents(
 	islandBuildPath: string,
-	islandComponents: z.infer<typeof islandComponentSchema>[]
+	islandComponents: IslandComponent[]
 ) {
 	const islandWrappers = Array.from(
 		document.querySelectorAll(`[data-island-build-path="${islandBuildPath}"]`)
