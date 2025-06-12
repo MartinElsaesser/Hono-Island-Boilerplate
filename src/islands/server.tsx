@@ -26,14 +26,16 @@ export default function Island({ children }: { children: React.ReactElement }) {
 		}
 
 		return (
-			<div
-				data-island-props={superjson.stringify(children.props)}
-				data-island-build-path={children.type[ISLAND_BUILD_PATH]}
-				data-island-index={children.type[ISLAND_INDEX]}
-			>
-				{children}
+			<>
+				<div
+					data-island-props={superjson.stringify(children.props)}
+					data-island-build-path={children.type[ISLAND_BUILD_PATH]}
+					data-island-index={children.type[ISLAND_INDEX]}
+				>
+					{children}
+				</div>
 				<script src={children.type[ISLAND_BUILD_PATH]} type="module"></script>
-			</div>
+			</>
 		);
 	} catch (error: unknown) {
 		// display errors
