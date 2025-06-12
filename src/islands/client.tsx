@@ -1,6 +1,6 @@
 import { runsOnServer } from "../lib/runsOnServer.js";
 import { parse } from "superjson";
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import { z } from "zod";
 import { ComponentType } from "react";
 import { intersectAnyWithObject } from "../schemas/utilitySchemas.js";
@@ -127,9 +127,7 @@ export function registerIslands({
 				throw new Error(`Island component at index ${islandIndex} is not defined.`);
 			}
 
-			const root = createRoot(wrapper);
-			// TODO: use hydrate
-			root.render(<Component {...islandProps} />);
+			const root = hydrateRoot(wrapper, <Component {...islandProps} />);
 		}
 	}
 }
