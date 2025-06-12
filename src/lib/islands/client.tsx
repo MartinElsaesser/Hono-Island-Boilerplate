@@ -1,5 +1,5 @@
 import { hydrateRoot } from "react-dom/client";
-import { IslandComponent, wrapperSchema } from "./schema.js";
+import { type IslandComponent, wrapperSchema } from "./schema.js";
 
 export function hydrateIslandComponents(
 	islandBuildPath: string,

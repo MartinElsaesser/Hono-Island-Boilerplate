@@ -6,6 +6,7 @@
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"noUncheckedIndexedAccess": true,
+		"verbatimModuleSyntax": true,
 		"strict": true,
 		"skipLibCheck": true,
 		"noImplicitAny": true,

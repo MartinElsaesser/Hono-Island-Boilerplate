@@ -1,4 +1,4 @@
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
 import { hydrateIslandComponents } from "./client.js";
 import { ISLAND_BUILD_PATH, ISLAND_INDEX } from "./schema.js";
 import {
