@@ -15,3 +15,6 @@ export { registerIslands } from "./shared.js";
 // - no code splitting
 // - import.meta is not available
 // probably impossible without import.meta
+
+// TODO: publish to npm
+// instructions: https://www.totaltypescript.com/how-to-create-an-npm-package#8-set-up-our-ci-with-github-actions
