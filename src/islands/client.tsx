@@ -34,12 +34,12 @@ const maybeIslandComponentSchema = intersectAnyWithObject({
 	objectSchema: islandInfoSchema.partial(),
 });
 
-export function isIslandComponent(value: Function): value is z.infer<typeof islandComponentSchema> {
+export function isIslandComponent(value: any): value is z.infer<typeof islandComponentSchema> {
 	return islandComponentSchema.safeParse(value).success;
 }
 
 function maybeIslandComponent(
-	value: Function
+	value: any
 ): value is ComponentType<any> & z.infer<typeof maybeIslandComponentSchema> {
 	return maybeIslandComponentSchema.safeParse(value).success;
 }
