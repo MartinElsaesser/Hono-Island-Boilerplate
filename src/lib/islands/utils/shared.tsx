@@ -38,6 +38,7 @@ export function runsOnServer(): boolean {
 export function resolveComponentBuildPath(path: string) {
 	if (runsOnServer()) {
 		// server: file:///C:/Users/.../src/components/Counter.tsx
+		// TODO: should be configurable; and needs to work together with the buildIslands() function
 		const regex = /^file:.*src\/components\//;
 		const resolvedPath = path.replace(regex, "/static/build/").replace(/\.tsx$/, ".js");
 		return resolvedPath;
