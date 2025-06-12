@@ -34,14 +34,12 @@ const maybeIslandComponentSchema = intersectAnyWithObject({
 	objectSchema: islandInfoSchema.partial(),
 });
 
-export function isIslandComponent(
-	value: ComponentType<any>
-): value is z.infer<typeof islandComponentSchema> {
+export function isIslandComponent(value: Function): value is z.infer<typeof islandComponentSchema> {
 	return islandComponentSchema.safeParse(value).success;
 }
 
 function maybeIslandComponent(
-	value: ComponentType<any>
+	value: Function
 ): value is ComponentType<any> & z.infer<typeof maybeIslandComponentSchema> {
 	return maybeIslandComponentSchema.safeParse(value).success;
 }
@@ -76,16 +74,15 @@ export function registerIslands({
 
 	// ensure that registerIslands is called only once per file
 	if (calledInFiles.has(meta.url)) {
-		throw new Error(`registerIslands was called multiple times in the same file`);
+		throw new Error(`registerIslands() was called multiple times in the same file`);
 	}
 	calledInFiles.add(meta.url);
 
 	const islandComponents = components.map((component, islandIndex) => {
-		// TODO: validate that the component is a valid react component
 		if (!maybeIslandComponent(component)) {
-			throw new Error(`Component at index ${islandIndex} is not a valid island component.`);
+			throw new Error(`Component at index ${islandIndex} is not a valid react component.`);
 		}
-		if (component[ISLAND_INDEX] === undefined) {
+		if (component[ISLAND_INDEX] === undefined && component[ISLAND_BUILD_PATH] === undefined) {
 			Object.defineProperty(component, ISLAND_INDEX, {
 				value: islandIndex,
 				writable: false,
@@ -98,7 +95,9 @@ export function registerIslands({
 			});
 		}
 		if (!isIslandComponent(component)) {
-			throw new Error(`Component at index ${islandIndex} is not a valid island component.`);
+			throw new Error(
+				`Something went wrong with the component at index ${islandIndex}, did you set one of theses properties: islandIndex, islandBuildPath on the component?`
+			);
 		}
 		return component;
 	});
@@ -109,7 +108,6 @@ export function registerIslands({
 		const islandWrappers = Array.from(
 			document.querySelectorAll(`[data-island-build-path="${islandBuildPath}"]`)
 		) as HTMLElement[];
-		console.log(islandWrappers);
 
 		for (const wrapper of islandWrappers) {
 			// get island index and props from the wrapper element
@@ -124,7 +122,9 @@ export function registerIslands({
 
 			if (Component === undefined) {
 				// TODO: improve this error message
-				throw new Error(`Island component at index ${islandIndex} is not defined.`);
+				throw new Error(
+					`Unexpected error: no Island component at index ${islandIndex} found.`
+				);
 			}
 
 			const root = hydrateRoot(wrapper, <Component {...islandProps} />);
