@@ -14,13 +14,12 @@ export function hydrateIslandComponents(
 		// get island index and props from the wrapper element
 		// island index will tell us which island to render
 		// props will be used to achieve the same state as on the server
-		const { islandIndex, islandBuildPath, islandProps } = wrapperSchema.parse(wrapper.dataset);
+		const { islandIndex, islandProps } = wrapperSchema.parse(wrapper.dataset);
 
 		const Component = islandComponents[islandIndex];
 
 		if (Component === undefined) {
-			// TODO: improve this error message
-			throw new Error(`Unexpected error: no Island component at index ${islandIndex} found.`);
+			throw new Error(`Unexpected error: no Island component found at index ${islandIndex}.`);
 		}
 
 		const root = hydrateRoot(wrapper, <Component {...islandProps} />);
