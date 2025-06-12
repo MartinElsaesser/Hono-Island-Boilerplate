@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerIslands } from "../islands/client.js";
+import { registerIslands } from "../lib/islands/index.js";
 
 export default function Counter({ $count }: { $count: number }) {
 	const [count, setCount] = useState($count);
@@ -14,6 +14,9 @@ export default function Counter({ $count }: { $count: number }) {
 		</div>
 	);
 }
+
+// Counter.islandIndex = 0;
+// Counter.islandBuildPath = import.meta.url;
 
 registerIslands({
 	components: [Counter],

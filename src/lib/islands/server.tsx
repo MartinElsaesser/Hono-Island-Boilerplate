@@ -1,10 +1,11 @@
 import React, { createContext, use, useContext } from "react";
 import superjson from "superjson";
-import { isIslandComponent, ISLAND_BUILD_PATH, ISLAND_INDEX, registerIslands } from "./client.js";
+import { isIslandComponent } from "./shared.js";
+import { ISLAND_BUILD_PATH, ISLAND_INDEX } from "./schema.js";
 
 const RegistrationContext = createContext(false);
 
-export default function Island({ children }: { children: React.ReactElement }) {
+export function Island({ children }: { children: React.ReactElement }) {
 	try {
 		// TODO: format zod error messages in a readable way
 

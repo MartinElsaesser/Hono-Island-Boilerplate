@@ -5,7 +5,7 @@ import socketIOServer from "./socket-io-server.js";
 import { reactRenderer } from "@hono/react-renderer";
 import TodoApp, { type Todo } from "./components/TodoApp.js";
 import Counter from "./components/Counter.js";
-import Island from "./islands/server.js";
+import { Island } from "./lib/islands/index.js";
 import {
 	TestCounter1,
 	TestCounter2,
@@ -86,6 +86,10 @@ app.get("/test-components", c => {
 			<h2>Test Counter 8</h2>
 			<Island>
 				<TestCounter8></TestCounter8>
+			</Island>
+			<h2>Counter</h2>
+			<Island>
+				<Counter $count={10}></Counter>
 			</Island>
 		</>
 	);

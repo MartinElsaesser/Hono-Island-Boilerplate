@@ -1,5 +1,5 @@
 import { useState, Component } from "react";
-import { registerIslands } from "../islands/client.js";
+import { registerIslands } from "../lib/islands/index.js";
 
 export function TestCounter1() {
 	const [count, setCount] = useState(0);
