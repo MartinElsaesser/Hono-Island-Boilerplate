@@ -3,8 +3,9 @@ import { parse } from "superjson";
 import { createRoot } from "react-dom/client";
 import { z } from "zod";
 import { ComponentType } from "react";
+import { intersectAnyWithObject } from "../schemas/utilitySchemas.js";
 
-export const islandSchema = z.object({
+export const wrapperSchema = z.object({
 	islandProps: z.string().transform(val => parse(val)),
 	islandBuildPath: z.string().min(1),
 	islandIndex: z.coerce.number(), // TODO: improve this to be safer
@@ -15,30 +16,52 @@ let calledInFiles = new Set<string>();
 export const ISLAND_INDEX = "islandIndex";
 export const ISLAND_BUILD_PATH = "islandBuildPath";
 
-type IslandInformation = {
-	islandIndex: number;
-	islandBuildPath: string;
-};
+const islandInfoSchema = z.object({
+	islandIndex: z.number(),
+	islandBuildPath: z.string(),
+});
 
-type IslandComponent = ComponentType<any> & IslandInformation;
-type MaybeIslandComponent = ComponentType<any> & Partial<IslandInformation>;
-type a = Partial<IslandInformation>;
+const componentSchema = z.custom<ComponentType<any>>(value => {
+	return z.function().safeParse(value).success;
+});
 
-export function isIslandComponent(value: any): value is IslandComponent {
-	return (
-		typeof value === "function" &&
-		typeof value.islandIndex === "number" &&
-		typeof value.islandBuildPath === "string"
-	);
+const islandComponentSchema = intersectAnyWithObject({
+	anySchema: componentSchema,
+	objectSchema: islandInfoSchema,
+});
+const maybeIslandComponentSchema = intersectAnyWithObject({
+	anySchema: componentSchema,
+	objectSchema: islandInfoSchema.partial(),
+});
+
+export function isIslandComponent(
+	value: ComponentType<any>
+): value is z.infer<typeof islandComponentSchema> {
+	return islandComponentSchema.safeParse(value).success;
 }
 
-function maybeIslandComponent(value: any): value is MaybeIslandComponent {
-	return (
-		typeof value === "function" &&
-		(typeof value.islandIndex === "number" || typeof value.islandIndex === "undefined") &&
-		(typeof value.islandBuildPath === "string" || typeof value.islandBuildPath === "undefined")
-	);
+function maybeIslandComponent(
+	value: ComponentType<any>
+): value is ComponentType<any> & z.infer<typeof maybeIslandComponentSchema> {
+	return maybeIslandComponentSchema.safeParse(value).success;
 }
+
+// component: functional component, or class component
+// element: <FC />, or <CC />
+//
+
+// island lifecycle:
+// 	SERVER
+// 		normal React component: Component
+// 		react component with tracking information: islandComponent
+// 		react component as jsx (cannot be used in Island): jsxElement
+// 		react component with tracking information as jsx (can be used in Island): islandElement
+//      react components rendered to HTML
+// 	CLIENT
+// 		normal React component
+// 		react component with tracking information
+// 		react component as jsx
+// 		react component with tracking information rendered to HTML
 
 // TODO: change this to accept a list of components, so that each component is only hydrated once
 // TODO: validate that the component is a valid react component
@@ -84,29 +107,28 @@ export function registerIslands({
 		// client-side rendering
 		// get all html elements that wrap islands
 		const islandWrappers = Array.from(
-			document.querySelectorAll("[data-island-build-path]")
+			document.querySelectorAll(`[data-island-build-path="${islandBuildPath}"]`)
 		) as HTMLElement[];
+		console.log(islandWrappers);
 
 		for (const wrapper of islandWrappers) {
 			// get island index and props from the wrapper element
 			// island index will tell us which island to render
 			// props will be used to achieve the same state as on the server
 
-			const { islandIndex, islandBuildPath, islandProps } = islandSchema.parse(
+			const { islandIndex, islandBuildPath, islandProps } = wrapperSchema.parse(
 				wrapper.dataset
 			);
 
 			const Component = islandComponents[islandIndex];
 
-			if (
-				Component === undefined ||
-				Component.islandIndex !== islandIndex ||
-				Component.islandBuildPath !== islandBuildPath
-			) {
-				continue;
+			if (Component === undefined) {
+				// TODO: improve this error message
+				throw new Error(`Island component at index ${islandIndex} is not defined.`);
 			}
 
 			const root = createRoot(wrapper);
+			// TODO: use hydrate
 			root.render(<Component {...islandProps} />);
 		}
 	}
